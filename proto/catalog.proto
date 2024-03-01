@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package catalog;
+package proto;
 
-option go_package = "/catalog";
+option go_package = "CatalogService/proto";
 
 service CatalogService {
   rpc AddRestaurant (Restaurant) returns (Restaurant);

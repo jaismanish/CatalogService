@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.25.3
-// source: catalog/catalog.proto
+// source: proto/catalog.proto
 
-package catalog
+package proto
 
 import (
 	context "context"
@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	CatalogService_AddRestaurant_FullMethodName  = "/catalog.CatalogService/AddRestaurant"
-	CatalogService_AddMenuItem_FullMethodName    = "/catalog.CatalogService/AddMenuItem"
-	CatalogService_GetRestaurants_FullMethodName = "/catalog.CatalogService/GetRestaurants"
-	CatalogService_GetMenuItems_FullMethodName   = "/catalog.CatalogService/GetMenuItems"
+	CatalogService_AddRestaurant_FullMethodName  = "/proto.CatalogService/AddRestaurant"
+	CatalogService_AddMenuItem_FullMethodName    = "/proto.CatalogService/AddMenuItem"
+	CatalogService_GetRestaurants_FullMethodName = "/proto.CatalogService/GetRestaurants"
+	CatalogService_GetMenuItems_FullMethodName   = "/proto.CatalogService/GetMenuItems"
 )
 
 // CatalogServiceClient is the client API for CatalogService service.
@@ -195,7 +195,7 @@ func _CatalogService_GetMenuItems_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CatalogService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "catalog.CatalogService",
+	ServiceName: "proto.CatalogService",
 	HandlerType: (*CatalogServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -216,5 +216,5 @@ var CatalogService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "catalog/catalog.proto",
+	Metadata: "proto/catalog.proto",
 }
