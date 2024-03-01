@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package catalog;
+
+option go_package = "/catalog";
+
+service CatalogService {
+  rpc AddRestaurant (Restaurant) returns (Restaurant);
+  rpc AddMenuItem (MenuItem) returns (MenuItem);
+  rpc GetRestaurants (Empty) returns (RestaurantList);
+  rpc GetMenuItems (RestaurantID) returns (MenuItemList);
+}
+
+message Restaurant {
+  int32 id = 1;
+  string name = 2;
+  string location = 3;
+}
+
+message MenuItem {
+  int32 id = 1;
+  string name = 2;
+  double price = 3;
+  int32 restaurant_id = 4;
+}
+
+message RestaurantList {
+  repeated Restaurant restaurants = 1;
+}
+
+message MenuItemList {
+  repeated MenuItem menu_items = 1;
+}
+
+message RestaurantID {
+  int32 id = 1;
+}
+
+message Empty {}
