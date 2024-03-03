@@ -1,63 +1,23 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
+	"github.com/jaismanish15/CatalogService/db"
 	"github.com/jaismanish15/CatalogService/server"
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
-
-func initDB() error {
-	connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		"localhost", 5432, "postgres", "Manish@2001", "Catalog")
-
-	var err error
-	db, err = sql.Open("postgres", connStr)
-	if err != nil {
-		return err
-	}
-
-	err = createTables()
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func createTables() error {
-	_, err := db.Exec(`
-		CREATE TABLE IF NOT EXISTS restaurants (
-			id SERIAL PRIMARY KEY,
-			name VARCHAR(255),
-			location VARCHAR(255)
-		);
-		CREATE TABLE IF NOT EXISTS menu_items (
-			id SERIAL PRIMARY KEY,
-			name VARCHAR(255),
-			price DOUBLE PRECISION,
-			restaurant_id INT
-		);
-	`)
-
-	return err
-}
-
 func main() {
-	err := initDB()
+	err := db.InitDB()
 	if err != nil {
 		fmt.Println("Error initializing database:", err)
 		return
 	}
 
-	defer db.Close()
+	defer db.CloseDB()
 
-	// Create an instance of the catalog service
-	catalogService := catalog.NewCatalogService(db)
+	catalogService := catalog.NewCatalogService(db.GetDB())
 
-	// Example usage
 	restaurant, err := catalogService.AddRestaurant("New Restaurant", "New Location")
 	if err != nil {
 		fmt.Println("Error adding restaurant:", err)
