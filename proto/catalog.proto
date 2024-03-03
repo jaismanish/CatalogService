@@ -2,13 +2,15 @@ syntax = "proto3";
 
 package proto;
 
+import "google/protobuf/empty.proto";
+
 option go_package = "CatalogService/proto";
 
 service CatalogService {
   rpc AddRestaurant (Restaurant) returns (Restaurant);
   rpc AddMenuItem (MenuItem) returns (MenuItem);
-  rpc GetRestaurants (Empty) returns (RestaurantList);
-  rpc GetMenuItems (RestaurantID) returns (MenuItemList);
+  rpc GetRestaurants (google.protobuf.Empty) returns (stream Restaurant);
+  rpc GetMenuItems (google.protobuf.Empty) returns (stream MenuItem);
 }
 
 message Restaurant {
@@ -32,7 +34,7 @@ message MenuItemList {
   repeated MenuItem menu_items = 1;
 }
 
-message RestaurantID {
+message RestaurantId {
   int32 id = 1;
 }
 
