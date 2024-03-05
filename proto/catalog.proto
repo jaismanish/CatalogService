@@ -46,7 +46,7 @@ message AddMenuItemResponse {
 message GetRestaurantsRequest {}
 
 message GetRestaurantsResponse {
-  map<int32, Restaurant> restaurants = 1;
+  repeated Restaurant restaurants = 1;
 }
 
 message GetMenuItemsRequest {
@@ -54,5 +54,5 @@ message GetMenuItemsRequest {
 }
 
 message GetMenuItemsResponse {
-  map<int32, MenuItem> menuItems = 1;
+  repeated MenuItem menuItems = 1;
 }

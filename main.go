@@ -1,6 +1,8 @@
 package main
 
 import (
+	"CatalogService/proto"
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -19,6 +21,7 @@ const (
 
 type catalogService struct {
 	db *sql.DB
+	proto.UnimplementedCatalogServiceServer
 }
 
 func NewCatalogService() (*catalogService, error) {
@@ -65,6 +68,23 @@ func createTables(db *sql.DB) error {
 	}
 
 	return nil
+}
+
+func (s *catalogService) AddRestaurant(ctx context.Context, req *proto.AddRestaurantRequest) (*proto.AddRestaurantResponse, error) {
+	return &proto.AddRestaurantResponse{Success: true}, nil
+}
+
+func (s *catalogService) AddMenuItem(ctx context.Context, req *proto.AddMenuItemRequest) (*proto.AddMenuItemResponse, error) {
+	return &proto.AddMenuItemResponse{Success: true}, nil
+}
+
+func (s *catalogService) GetRestaurants(ctx context.Context, req *proto.GetRestaurantsRequest) (*proto.GetRestaurantsResponse, error) {
+
+	return &proto.GetRestaurantsResponse{}, nil
+}
+
+func (s *catalogService) GetMenuItems(ctx context.Context, req *proto.GetMenuItemsRequest) (*proto.GetMenuItemsResponse, error) {
+	return &proto.GetMenuItemsResponse{}, nil
 }
 
 func main() {

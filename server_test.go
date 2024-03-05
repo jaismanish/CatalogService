@@ -41,6 +41,10 @@ func setupTest() {
 		log.Fatal(err)
 	}
 
+	catalogSrv := &catalogService{db: db}
+	testServer = grpc.NewServer()
+	proto.RegisterCatalogServiceServer(testServer, catalogSrv)
+
 	go func() {
 		listen, err := net.Listen("tcp", ":50052")
 		if err != nil {
@@ -74,5 +78,4 @@ func TestAddRestaurant(t *testing.T) {
 	resp, err := testClient.AddRestaurant(context.Background(), &proto.AddRestaurantRequest{Name: "Test Restaurant", Location: "Test Location"})
 	assert.NoError(t, err)
 	assert.True(t, resp.Success)
-
 }
