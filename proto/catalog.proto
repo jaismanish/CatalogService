@@ -1,17 +1,8 @@
 syntax = "proto3";
 
-package proto;
+package CatalogService;
 
-import "google/protobuf/empty.proto";
-
-option go_package = "CatalogService/proto";
-
-service CatalogService {
-  rpc AddRestaurant (Restaurant) returns (Restaurant);
-  rpc AddMenuItem (MenuItem) returns (MenuItem);
-  rpc GetRestaurants (google.protobuf.Empty) returns (stream Restaurant);
-  rpc GetMenuItems (google.protobuf.Empty) returns (stream MenuItem);
-}
+option go_package = "/proto";
 
 message Restaurant {
   int32 id = 1;
@@ -26,16 +17,42 @@ message MenuItem {
   int32 restaurant_id = 4;
 }
 
-message RestaurantList {
-  repeated Restaurant restaurants = 1;
+service CatalogService {
+  rpc AddRestaurant(AddRestaurantRequest) returns (AddRestaurantResponse);
+  rpc AddMenuItem(AddMenuItemRequest) returns (AddMenuItemResponse);
+  rpc GetRestaurants(GetRestaurantsRequest) returns (GetRestaurantsResponse);
+  rpc GetMenuItems(GetMenuItemsRequest) returns (GetMenuItemsResponse);
 }
 
-message MenuItemList {
-  repeated MenuItem menu_items = 1;
+message AddRestaurantRequest {
+  string name = 1;
+  string location = 2;
 }
 
-message RestaurantId {
-  int32 id = 1;
+message AddRestaurantResponse {
+  bool success = 1;
 }
 
-message Empty {}
+message AddMenuItemRequest {
+  string name = 1;
+  double price = 2;
+  int32 restaurant_id = 3;
+}
+
+message AddMenuItemResponse {
+  bool success = 1;
+}
+
+message GetRestaurantsRequest {}
+
+message GetRestaurantsResponse {
+  map<int32, Restaurant> restaurants = 1;
+}
+
+message GetMenuItemsRequest {
+  int32 restaurant_id = 1;
+}
+
+message GetMenuItemsResponse {
+  map<int32, MenuItem> menuItems = 1;
+}

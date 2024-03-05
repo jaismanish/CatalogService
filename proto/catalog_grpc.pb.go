@@ -11,7 +11,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,20 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	CatalogService_AddRestaurant_FullMethodName  = "/proto.CatalogService/AddRestaurant"
-	CatalogService_AddMenuItem_FullMethodName    = "/proto.CatalogService/AddMenuItem"
-	CatalogService_GetRestaurants_FullMethodName = "/proto.CatalogService/GetRestaurants"
-	CatalogService_GetMenuItems_FullMethodName   = "/proto.CatalogService/GetMenuItems"
+	CatalogService_AddRestaurant_FullMethodName  = "/CatalogService.CatalogService/AddRestaurant"
+	CatalogService_AddMenuItem_FullMethodName    = "/CatalogService.CatalogService/AddMenuItem"
+	CatalogService_GetRestaurants_FullMethodName = "/CatalogService.CatalogService/GetRestaurants"
+	CatalogService_GetMenuItems_FullMethodName   = "/CatalogService.CatalogService/GetMenuItems"
 )
 
 // CatalogServiceClient is the client API for CatalogService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CatalogServiceClient interface {
-	AddRestaurant(ctx context.Context, in *Restaurant, opts ...grpc.CallOption) (*Restaurant, error)
-	AddMenuItem(ctx context.Context, in *MenuItem, opts ...grpc.CallOption) (*MenuItem, error)
-	GetRestaurants(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (CatalogService_GetRestaurantsClient, error)
-	GetMenuItems(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (CatalogService_GetMenuItemsClient, error)
+	AddRestaurant(ctx context.Context, in *AddRestaurantRequest, opts ...grpc.CallOption) (*AddRestaurantResponse, error)
+	AddMenuItem(ctx context.Context, in *AddMenuItemRequest, opts ...grpc.CallOption) (*AddMenuItemResponse, error)
+	GetRestaurants(ctx context.Context, in *GetRestaurantsRequest, opts ...grpc.CallOption) (*GetRestaurantsResponse, error)
+	GetMenuItems(ctx context.Context, in *GetMenuItemsRequest, opts ...grpc.CallOption) (*GetMenuItemsResponse, error)
 }
 
 type catalogServiceClient struct {
@@ -44,8 +43,8 @@ func NewCatalogServiceClient(cc grpc.ClientConnInterface) CatalogServiceClient {
 	return &catalogServiceClient{cc}
 }
 
-func (c *catalogServiceClient) AddRestaurant(ctx context.Context, in *Restaurant, opts ...grpc.CallOption) (*Restaurant, error) {
-	out := new(Restaurant)
+func (c *catalogServiceClient) AddRestaurant(ctx context.Context, in *AddRestaurantRequest, opts ...grpc.CallOption) (*AddRestaurantResponse, error) {
+	out := new(AddRestaurantResponse)
 	err := c.cc.Invoke(ctx, CatalogService_AddRestaurant_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -53,8 +52,8 @@ func (c *catalogServiceClient) AddRestaurant(ctx context.Context, in *Restaurant
 	return out, nil
 }
 
-func (c *catalogServiceClient) AddMenuItem(ctx context.Context, in *MenuItem, opts ...grpc.CallOption) (*MenuItem, error) {
-	out := new(MenuItem)
+func (c *catalogServiceClient) AddMenuItem(ctx context.Context, in *AddMenuItemRequest, opts ...grpc.CallOption) (*AddMenuItemResponse, error) {
+	out := new(AddMenuItemResponse)
 	err := c.cc.Invoke(ctx, CatalogService_AddMenuItem_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,78 +61,32 @@ func (c *catalogServiceClient) AddMenuItem(ctx context.Context, in *MenuItem, op
 	return out, nil
 }
 
-func (c *catalogServiceClient) GetRestaurants(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (CatalogService_GetRestaurantsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &CatalogService_ServiceDesc.Streams[0], CatalogService_GetRestaurants_FullMethodName, opts...)
+func (c *catalogServiceClient) GetRestaurants(ctx context.Context, in *GetRestaurantsRequest, opts ...grpc.CallOption) (*GetRestaurantsResponse, error) {
+	out := new(GetRestaurantsResponse)
+	err := c.cc.Invoke(ctx, CatalogService_GetRestaurants_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &catalogServiceGetRestaurantsClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type CatalogService_GetRestaurantsClient interface {
-	Recv() (*Restaurant, error)
-	grpc.ClientStream
-}
-
-type catalogServiceGetRestaurantsClient struct {
-	grpc.ClientStream
-}
-
-func (x *catalogServiceGetRestaurantsClient) Recv() (*Restaurant, error) {
-	m := new(Restaurant)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *catalogServiceClient) GetMenuItems(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (CatalogService_GetMenuItemsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &CatalogService_ServiceDesc.Streams[1], CatalogService_GetMenuItems_FullMethodName, opts...)
+func (c *catalogServiceClient) GetMenuItems(ctx context.Context, in *GetMenuItemsRequest, opts ...grpc.CallOption) (*GetMenuItemsResponse, error) {
+	out := new(GetMenuItemsResponse)
+	err := c.cc.Invoke(ctx, CatalogService_GetMenuItems_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &catalogServiceGetMenuItemsClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type CatalogService_GetMenuItemsClient interface {
-	Recv() (*MenuItem, error)
-	grpc.ClientStream
-}
-
-type catalogServiceGetMenuItemsClient struct {
-	grpc.ClientStream
-}
-
-func (x *catalogServiceGetMenuItemsClient) Recv() (*MenuItem, error) {
-	m := new(MenuItem)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // CatalogServiceServer is the server API for CatalogService service.
 // All implementations must embed UnimplementedCatalogServiceServer
 // for forward compatibility
 type CatalogServiceServer interface {
-	AddRestaurant(context.Context, *Restaurant) (*Restaurant, error)
-	AddMenuItem(context.Context, *MenuItem) (*MenuItem, error)
-	GetRestaurants(*emptypb.Empty, CatalogService_GetRestaurantsServer) error
-	GetMenuItems(*emptypb.Empty, CatalogService_GetMenuItemsServer) error
+	AddRestaurant(context.Context, *AddRestaurantRequest) (*AddRestaurantResponse, error)
+	AddMenuItem(context.Context, *AddMenuItemRequest) (*AddMenuItemResponse, error)
+	GetRestaurants(context.Context, *GetRestaurantsRequest) (*GetRestaurantsResponse, error)
+	GetMenuItems(context.Context, *GetMenuItemsRequest) (*GetMenuItemsResponse, error)
 	mustEmbedUnimplementedCatalogServiceServer()
 }
 
@@ -141,17 +94,17 @@ type CatalogServiceServer interface {
 type UnimplementedCatalogServiceServer struct {
 }
 
-func (UnimplementedCatalogServiceServer) AddRestaurant(context.Context, *Restaurant) (*Restaurant, error) {
+func (UnimplementedCatalogServiceServer) AddRestaurant(context.Context, *AddRestaurantRequest) (*AddRestaurantResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRestaurant not implemented")
 }
-func (UnimplementedCatalogServiceServer) AddMenuItem(context.Context, *MenuItem) (*MenuItem, error) {
+func (UnimplementedCatalogServiceServer) AddMenuItem(context.Context, *AddMenuItemRequest) (*AddMenuItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddMenuItem not implemented")
 }
-func (UnimplementedCatalogServiceServer) GetRestaurants(*emptypb.Empty, CatalogService_GetRestaurantsServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetRestaurants not implemented")
+func (UnimplementedCatalogServiceServer) GetRestaurants(context.Context, *GetRestaurantsRequest) (*GetRestaurantsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRestaurants not implemented")
 }
-func (UnimplementedCatalogServiceServer) GetMenuItems(*emptypb.Empty, CatalogService_GetMenuItemsServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetMenuItems not implemented")
+func (UnimplementedCatalogServiceServer) GetMenuItems(context.Context, *GetMenuItemsRequest) (*GetMenuItemsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMenuItems not implemented")
 }
 func (UnimplementedCatalogServiceServer) mustEmbedUnimplementedCatalogServiceServer() {}
 
@@ -167,7 +120,7 @@ func RegisterCatalogServiceServer(s grpc.ServiceRegistrar, srv CatalogServiceSer
 }
 
 func _CatalogService_AddRestaurant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Restaurant)
+	in := new(AddRestaurantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -179,13 +132,13 @@ func _CatalogService_AddRestaurant_Handler(srv interface{}, ctx context.Context,
 		FullMethod: CatalogService_AddRestaurant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).AddRestaurant(ctx, req.(*Restaurant))
+		return srv.(CatalogServiceServer).AddRestaurant(ctx, req.(*AddRestaurantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CatalogService_AddMenuItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MenuItem)
+	in := new(AddMenuItemRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -197,58 +150,52 @@ func _CatalogService_AddMenuItem_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: CatalogService_AddMenuItem_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).AddMenuItem(ctx, req.(*MenuItem))
+		return srv.(CatalogServiceServer).AddMenuItem(ctx, req.(*AddMenuItemRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CatalogService_GetRestaurants_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(emptypb.Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _CatalogService_GetRestaurants_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRestaurantsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(CatalogServiceServer).GetRestaurants(m, &catalogServiceGetRestaurantsServer{stream})
-}
-
-type CatalogService_GetRestaurantsServer interface {
-	Send(*Restaurant) error
-	grpc.ServerStream
-}
-
-type catalogServiceGetRestaurantsServer struct {
-	grpc.ServerStream
-}
-
-func (x *catalogServiceGetRestaurantsServer) Send(m *Restaurant) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _CatalogService_GetMenuItems_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(emptypb.Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+	if interceptor == nil {
+		return srv.(CatalogServiceServer).GetRestaurants(ctx, in)
 	}
-	return srv.(CatalogServiceServer).GetMenuItems(m, &catalogServiceGetMenuItemsServer{stream})
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogService_GetRestaurants_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogServiceServer).GetRestaurants(ctx, req.(*GetRestaurantsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-type CatalogService_GetMenuItemsServer interface {
-	Send(*MenuItem) error
-	grpc.ServerStream
-}
-
-type catalogServiceGetMenuItemsServer struct {
-	grpc.ServerStream
-}
-
-func (x *catalogServiceGetMenuItemsServer) Send(m *MenuItem) error {
-	return x.ServerStream.SendMsg(m)
+func _CatalogService_GetMenuItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMenuItemsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogServiceServer).GetMenuItems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogService_GetMenuItems_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogServiceServer).GetMenuItems(ctx, req.(*GetMenuItemsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // CatalogService_ServiceDesc is the grpc.ServiceDesc for CatalogService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CatalogService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.CatalogService",
+	ServiceName: "CatalogService.CatalogService",
 	HandlerType: (*CatalogServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -259,18 +206,15 @@ var CatalogService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "AddMenuItem",
 			Handler:    _CatalogService_AddMenuItem_Handler,
 		},
-	},
-	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GetRestaurants",
-			Handler:       _CatalogService_GetRestaurants_Handler,
-			ServerStreams: true,
+			MethodName: "GetRestaurants",
+			Handler:    _CatalogService_GetRestaurants_Handler,
 		},
 		{
-			StreamName:    "GetMenuItems",
-			Handler:       _CatalogService_GetMenuItems_Handler,
-			ServerStreams: true,
+			MethodName: "GetMenuItems",
+			Handler:    _CatalogService_GetMenuItems_Handler,
 		},
 	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/catalog.proto",
 }
