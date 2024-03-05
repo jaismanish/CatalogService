@@ -41,12 +41,25 @@ func NewCatalogService() (*catalogService, error) {
 }
 
 func createTables(db *sql.DB) error {
-	_, err := db.Exec(``)
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS restaurants (
+			id SERIAL PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			location VARCHAR(255) NOT NULL
+		)
+	`)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec(``)
+	_, err = db.Exec(`
+		CREATE TABLE IF NOT EXISTS menu_items (
+			id SERIAL PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			price DECIMAL(10,2) NOT NULL,
+			restaurant_id INTEGER REFERENCES restaurants(id) ON DELETE CASCADE
+		)
+	`)
 	if err != nil {
 		return err
 	}
