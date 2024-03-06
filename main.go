@@ -80,6 +80,11 @@ func (s *catalogService) AddRestaurant(ctx context.Context, req *proto.AddRestau
 }
 
 func (s *catalogService) AddMenuItem(ctx context.Context, req *proto.AddMenuItemRequest) (*proto.AddMenuItemResponse, error) {
+	_, err := s.db.Exec("INSERT INTO menu_items (name, price, restaurant_id) VALUES ($1, $2, $3)", req.Name, req.Price, req.RestaurantId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to add menu item: %v", err)
+	}
+
 	return &proto.AddMenuItemResponse{Success: true}, nil
 }
 

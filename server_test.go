@@ -85,3 +85,15 @@ func TestAddRestaurant(t *testing.T) {
 	assert.NoError(t, err)
 	assert.True(t, res.Success)
 }
+
+func TestAddMenuItem(t *testing.T) {
+	req := &proto.AddMenuItemRequest{
+		Name:         "Test Item",
+		Price:        10.99,
+		RestaurantId: 1,
+	}
+
+	res, err := testClient.AddMenuItem(context.Background(), req)
+	assert.NoError(t, err)
+	assert.True(t, res.Success)
+}
