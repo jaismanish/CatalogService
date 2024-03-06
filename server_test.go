@@ -105,3 +105,13 @@ func TestGetRestaurants(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, res.Restaurants)
 }
+
+func TestGetMenuItems(t *testing.T) {
+	req := &proto.GetMenuItemsRequest{
+		RestaurantId: 1,
+	}
+
+	res, err := testClient.GetMenuItems(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, res.MenuItems)
+}

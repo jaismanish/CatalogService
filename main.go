@@ -108,7 +108,21 @@ func (s *catalogService) GetRestaurants(ctx context.Context, req *proto.GetResta
 }
 
 func (s *catalogService) GetMenuItems(ctx context.Context, req *proto.GetMenuItemsRequest) (*proto.GetMenuItemsResponse, error) {
-	return &proto.GetMenuItemsResponse{}, nil
+	rows, err := s.db.Query("SELECT id, name, price, restaurant_id FROM menu_items WHERE restaurant_id = $1", req.RestaurantId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get menu items: %v", err)
+	}
+	defer rows.Close()
+
+	var menuItems []*proto.MenuItem
+	for rows.Next() {
+		var mi proto.MenuItem
+		if err := rows.Scan(&mi.Id, &mi.Name, &mi.Price, &mi.RestaurantId); err != nil {
+			return nil, fmt.Errorf("failed to scan menu item: %v", err)
+		}
+		menuItems = append(menuItems, &mi)
+	}
+	return &proto.GetMenuItemsResponse{MenuItems: menuItems}, nil
 }
 
 func main() {
