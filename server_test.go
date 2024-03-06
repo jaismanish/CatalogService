@@ -10,6 +10,7 @@ import (
 	"os"
 	"testing"
 
+	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 )
@@ -75,7 +76,12 @@ func TestMain(m *testing.M) {
 }
 
 func TestAddRestaurant(t *testing.T) {
-	resp, err := testClient.AddRestaurant(context.Background(), &proto.AddRestaurantRequest{Name: "Test Restaurant", Location: "Test Location"})
+	req := &proto.AddRestaurantRequest{
+		Name:     "Test Restaurant",
+		Location: "Test Location",
+	}
+
+	res, err := testClient.AddRestaurant(context.Background(), req)
 	assert.NoError(t, err)
-	assert.True(t, resp.Success)
+	assert.True(t, res.Success)
 }

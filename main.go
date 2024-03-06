@@ -71,6 +71,11 @@ func createTables(db *sql.DB) error {
 }
 
 func (s *catalogService) AddRestaurant(ctx context.Context, req *proto.AddRestaurantRequest) (*proto.AddRestaurantResponse, error) {
+	_, err := s.db.Exec("INSERT INTO restaurants (name, location) VALUES ($1, $2)", req.Name, req.Location)
+	if err != nil {
+		return nil, fmt.Errorf("failed to add restaurant: %v", err)
+	}
+
 	return &proto.AddRestaurantResponse{Success: true}, nil
 }
 
@@ -79,7 +84,6 @@ func (s *catalogService) AddMenuItem(ctx context.Context, req *proto.AddMenuItem
 }
 
 func (s *catalogService) GetRestaurants(ctx context.Context, req *proto.GetRestaurantsRequest) (*proto.GetRestaurantsResponse, error) {
-
 	return &proto.GetRestaurantsResponse{}, nil
 }
 
