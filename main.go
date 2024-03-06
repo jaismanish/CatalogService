@@ -89,7 +89,22 @@ func (s *catalogService) AddMenuItem(ctx context.Context, req *proto.AddMenuItem
 }
 
 func (s *catalogService) GetRestaurants(ctx context.Context, req *proto.GetRestaurantsRequest) (*proto.GetRestaurantsResponse, error) {
-	return &proto.GetRestaurantsResponse{}, nil
+	rows, err := s.db.Query("SELECT id, name, location FROM restaurants")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get restaurants: %v", err)
+	}
+	defer rows.Close()
+
+	var restaurants []*proto.Restaurant
+	for rows.Next() {
+		var r proto.Restaurant
+		if err := rows.Scan(&r.Id, &r.Name, &r.Location); err != nil {
+			return nil, fmt.Errorf("failed to scan restaurant: %v", err)
+		}
+		restaurants = append(restaurants, &r)
+	}
+
+	return &proto.GetRestaurantsResponse{Restaurants: restaurants}, nil
 }
 
 func (s *catalogService) GetMenuItems(ctx context.Context, req *proto.GetMenuItemsRequest) (*proto.GetMenuItemsResponse, error) {
