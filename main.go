@@ -9,6 +9,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 const (
@@ -132,6 +133,10 @@ func main() {
 	}
 
 	server := grpc.NewServer()
+
+	proto.RegisterCatalogServiceServer(server, &catalogService{})
+
+	reflection.Register(server)
 
 	if err != nil {
 		log.Fatalf("Failed to create catalog service: %v", err)
