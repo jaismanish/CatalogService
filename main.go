@@ -33,21 +33,26 @@ func (s *catalogService) AddRestaurant(ctx context.Context, req *proto.AddRestau
 	if s.db == nil {
 		return nil, errors.New("database connection is nil")
 	}
-	_, err := s.db.Exec("INSERT INTO restaurants (name, location) VALUES ($1, $2)", req.Name, req.Location)
+	row := s.db.QueryRow("INSERT INTO restaurants (name, location) VALUES ($1, $2) RETURNING id, name", req.Name, req.Location)
+
+	var restaurant proto.Restaurant
+	err := row.Scan(&restaurant.Id, &restaurant.Name)
 	if err != nil {
-		return nil, fmt.Errorf("failed to add restaurant: %v", err)
+		return nil, fmt.Errorf("failed to retrieve restaurant details: %v", err)
 	}
 
-	return &proto.AddRestaurantResponse{Success: true}, nil
+	return &proto.AddRestaurantResponse{Success: true, Restaurant: &restaurant}, nil
 }
 
 func (s *catalogService) AddMenuItem(ctx context.Context, req *proto.AddMenuItemRequest) (*proto.AddMenuItemResponse, error) {
-	_, err := s.db.Exec("INSERT INTO menu_items (name, price, restaurant_id) VALUES ($1, $2, $3)", req.Name, req.Price, req.RestaurantId)
+	row := s.db.QueryRow("INSERT INTO menu_items (name, price, restaurant_id) VALUES ($1, $2, $3)", req.Name, req.Price, req.RestaurantId)
+	var menuItem proto.MenuItem
+	err := row.Scan(&menuItem.Id)
 	if err != nil {
-		return nil, fmt.Errorf("failed to add menu item: %v", err)
+		return nil, fmt.Errorf("failed to retrieve menu item details: %v", err)
 	}
 
-	return &proto.AddMenuItemResponse{Success: true}, nil
+	return &proto.AddMenuItemResponse{Success: true, MenuItem: &menuItem}, nil
 }
 
 func (s *catalogService) GetRestaurants(ctx context.Context, req *proto.GetRestaurantsRequest) (*proto.GetRestaurantsResponse, error) {

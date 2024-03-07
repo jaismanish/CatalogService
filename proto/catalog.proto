@@ -31,6 +31,7 @@ message AddRestaurantRequest {
 
 message AddRestaurantResponse {
   bool success = 1;
+  Restaurant restaurant = 2;
 }
 
 message AddMenuItemRequest {
@@ -41,6 +42,7 @@ message AddMenuItemRequest {
 
 message AddMenuItemResponse {
   bool success = 1;
+  MenuItem menuItem = 2;
 }
 
 message GetRestaurantsRequest {}
