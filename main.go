@@ -4,7 +4,9 @@ import (
 	"CatalogService/proto"
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 	"net"
 
@@ -72,6 +74,9 @@ func createTables(db *sql.DB) error {
 }
 
 func (s *catalogService) AddRestaurant(ctx context.Context, req *proto.AddRestaurantRequest) (*proto.AddRestaurantResponse, error) {
+	if s.db == nil {
+		return nil, errors.New("database connection is nil")
+	}
 	_, err := s.db.Exec("INSERT INTO restaurants (name, location) VALUES ($1, $2)", req.Name, req.Location)
 	if err != nil {
 		return nil, fmt.Errorf("failed to add restaurant: %v", err)
@@ -127,6 +132,11 @@ func (s *catalogService) GetMenuItems(ctx context.Context, req *proto.GetMenuIte
 }
 
 func main() {
+	dbService, err := NewCatalogService()
+	if err != nil {
+		log.Fatalf("Failed to create catalog service: %v", err)
+	}
+
 	listen, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
@@ -134,13 +144,9 @@ func main() {
 
 	server := grpc.NewServer()
 
-	proto.RegisterCatalogServiceServer(server, &catalogService{})
+	proto.RegisterCatalogServiceServer(server, dbService)
 
 	reflection.Register(server)
-
-	if err != nil {
-		log.Fatalf("Failed to create catalog service: %v", err)
-	}
 
 	fmt.Println("Starting gRPC server on port :50051")
 	if err := server.Serve(listen); err != nil {
